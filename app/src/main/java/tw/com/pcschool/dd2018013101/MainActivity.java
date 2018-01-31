@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     ImageView img;
@@ -50,9 +54,24 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
             {
                 File f = new File(getExternalFilesDir("PHOTO"), "myphoto.jpg");
-                Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-                img.setImageBitmap(bmp);
+                try {
+                    InputStream is = new FileInputStream(f);
+                    Bitmap bmp = getFitImage(is);
+                    img.setImageBitmap(bmp);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
+    }
+    public static Bitmap getFitImage(InputStream is)
+    {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap bmp = BitmapFactory.decodeStream(is, null, options);
+        System.gc();
+        return bmp;
+
     }
 }
