@@ -2,6 +2,7 @@ package tw.com.pcschool.dd2018013101;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 Bundle pBundle = data.getExtras();
                 Bitmap bmp = (Bitmap) pBundle.get("data");
+                img.setImageBitmap(bmp);
+            }
+        }
+        if (requestCode == 456)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                File f = new File(getExternalFilesDir("PHOTO"), "myphoto.jpg");
+                Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
                 img.setImageBitmap(bmp);
             }
         }
