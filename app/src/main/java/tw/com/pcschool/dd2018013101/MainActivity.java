@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File f = new File(getExternalFilesDir("PHOTO"), "myphoto.jpg");
-        it.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+        Uri photoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()
+                + ".my.package.name.provider", f);
+        it.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         startActivityForResult(it, 456);
     }
     @Override
@@ -60,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
             {
                 File f = new File(getExternalFilesDir("PHOTO"), "myphoto.jpg");
-                Uri photoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".my.package.name.provider", f);
+                Uri photoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()
+                        + ".my.package.name.provider", f);
                 try {
                     // InputStream is = new FileInputStream(photoUri);
                     InputStream is = getContentResolver().openInputStream(photoUri);
