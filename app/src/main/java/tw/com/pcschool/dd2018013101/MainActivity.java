@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         img = findViewById(R.id.imageView);
+
     }
     public void click1(View v)
     {
@@ -57,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
             {
                 File f = new File(getExternalFilesDir("PHOTO"), "myphoto.jpg");
+                Uri photoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".my.package.name.provider", f);
                 try {
-                    InputStream is = new FileInputStream(f);
+                    // InputStream is = new FileInputStream(photoUri);
+                    InputStream is = getContentResolver().openInputStream(photoUri);
                     Log.d("BMP", "Can READ:" + is.available());
                     Bitmap bmp = getFitImage(is);
                     img.setImageBitmap(bmp);
